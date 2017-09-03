@@ -9,20 +9,17 @@
 
 class Matrix {
 public:
-    Matrix(double **arr, int rowNumber, int colNumber) {
+    Matrix(unsigned rowNumber, unsigned colNumber) {
+        if (rowNumber == 0 || colNumber == 0)
+            throw BadIndex("Matrix constructor has 0 size");
         this->rowNumber = rowNumber;
         this->colNumber = colNumber;
-        matrix = new double* [rowNumber];
-        for (int rowIndex = 0; rowIndex < rowNumber; rowIndex++)
-        {
-            this->matrix[rowIndex] = new double[colNumber];
-            for (int colIndex = 0; colIndex < colNumber; colIndex++)
-            {
-                this->matrix[rowIndex][colIndex] = arr[rowIndex][colIndex];
-            }
+        matrix = new double[rowNumber*colNumber];
+        for (int index = 0; index < rowNumber*colNumber; index++) {
+            this->matrix[index] = 0;
         }
     };
-    double** getMatrix() {
+/*    double** getMatrix() {
         return this->matrix;
     };
     double getMatrixElement(int rn, int cn) const {
@@ -33,16 +30,12 @@ public:
     }
     int getColCount() const {
         return this->colNumber;
-    }
+    }*/
     ~Matrix() {
         std::cout << "Memory has been cleaned. Good bye." << std::endl;
-        for (int rowIndex = 0; rowIndex < this->rowNumber; rowIndex++)
-        {
-            delete[] this->matrix[rowIndex];
-        }
         delete[] this->matrix;
     };
-    const Matrix& operator += (const Matrix& matrix) {
+    /*const Matrix& operator += (const Matrix& matrix) {
         int mColNum, mRowNum;
         mColNum = matrix.getColCount();
         mRowNum = matrix.getRowCount();
@@ -97,9 +90,9 @@ public:
         }
         Matrix *newM = new Matrix(newMatrix, lRowNum, lColNum);
         return *newM;
-    }
+    }*/
 private:
-    double **matrix;
+    double *matrix;
     int rowNumber = 0, colNumber = 0;
 };
 
