@@ -1,47 +1,12 @@
 #include <iostream>
-
-class Matrix {
-public:
-    double **matrix = new double *[0];
-    Matrix(double **arr, int rowNumber, int colNumber) {
-        delete this->matrix;
-        this->matrix = new double *[rowNumber];
-        this->rowNumber = rowNumber;
-        this->colNumber = colNumber;
-        for (int rowIndex = 0; rowIndex < rowNumber; rowIndex++)
-        {
-            this->matrix[rowIndex] = new double[colNumber];
-            for (int colIndex = 0; colIndex < colNumber; colIndex++)
-            {
-                this->matrix[rowIndex][colIndex] = arr[rowIndex][colIndex];
-            }
-        }
-    };
-    ~Matrix() {
-        std::cout << "Memory has been cleaned. Good bye." << std::endl;
-    };
-    Matrix& operator += (const Matrix& matrix) {
-        for (int rowIndex = 0; rowIndex < this->rowNumber; rowIndex++)
-        {
-            for (int colIndex = 0; colIndex < this->colNumber; colIndex++)
-            {
-                this->matrix[rowIndex][colIndex] += matrix.matrix[rowIndex][colIndex];
-            }
-        }
-
-        return *this;
-    }
-private:
-
-    int rowNumber = 0, colNumber = 0;
-
-};
+#include "matrix/matrix.h"
 
 int main() {
 
     int c;
     int rn=3, cn =3;
     auto **arr =  new double *[rn];
+    auto **arr2 = new double *[rn];
 
     for (int i = 0; i < 3; i++)
     {
@@ -51,15 +16,45 @@ int main() {
             std::cin >> arr[i][j];
         }
     }
-    Matrix matr(arr, 3, 3);
-    Matrix matr2(arr, 3, 3);
-    matr+=matr2;
 
+    for (int i = 0; i < 3; i++)
+    {
+        arr2[i] = new double[cn];
+        for (int j = 0; j < 4; j++)
+        {
+            std::cin >> arr2[i][j];
+        }
+    }
+
+    Matrix *matr = new Matrix(arr, 3, 3);
+    Matrix *matr2 = new Matrix(arr2, 3, 4);
+    Matrix *matr3;
+    *matr+=*matr;
+    *matr3 = *matr+*matr;
+
+    try {
+        *matr+=*matr2;
+    }
+    catch(const std::invalid_argument& e) {
+        std::cout << e.what();
+    }
+
+    double **tmpp, **tmpp2;
+    tmpp = matr->getMatrix();
     for (int i = 0; i < 3; i++)
     {
         for (int j = 0; j < 3; j++)
         {
-            std::cout << matr.matrix[i][j];
+            std::cout << tmpp[i][j] << " ";
+        }
+        std::cout << std::endl;
+    }
+    tmpp2 = matr3->getMatrix();
+    for (int i = 0; i < 3; i++)
+    {
+        for (int j = 0; j < 3; j++)
+        {
+            std::cout << tmpp2[i][j] << " ";
         }
         std::cout << std::endl;
     }
